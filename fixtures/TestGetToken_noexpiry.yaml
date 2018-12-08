@@ -17,7 +17,7 @@ interactions:
     method: POST
   response:
     body: '{"label": "linodego-test-token", "expiry": "2999-12-12T05:00:00", "token":
-      "431485bee492baf2c2577342a87b4d5919f1f3360594c6a91acdb4d7826deb79", "id": 319584,
+      "awesometokenawesometokenawesometoken", "id": 319584,
       "created": "2018-01-02T03:04:05", "scopes": "linodes:read_only"}'
     headers:
       Access-Control-Allow-Credentials:
@@ -88,7 +88,7 @@ interactions:
     url: https://api.linode.com/v4/profile/tokens/319584
     method: GET
   response:
-    body: '{"id": 319584, "label": "linodego-test-token", "token": "431485bee492baf2",
+    body: '{"id": 319584, "label": "linodego-test-token", "token": "awesometoken",
       "created": "2018-01-02T03:04:05", "expiry": "2999-12-12T05:00:00", "scopes":
       "linodes:read_only"}'
     headers:

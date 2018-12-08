@@ -16,7 +16,7 @@ interactions:
     url: https://api.linode.com/v4/profile/tokens
     method: POST
   response:
-    body: '{"token": "b0c2deb6a3d1ebd82fd34b9dc388c3a4338d11e425ed79ad783423b6f8484360",
+    body: '{"token": "awesometokenawesometokenawesometoken",
       "id": 319582, "label": "linodego-test-token", "expiry": "2018-01-02T03:04:05",
       "scopes": "linodes:read_only", "created": "2018-01-02T03:04:05"}'
     headers:

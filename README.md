@@ -164,8 +164,9 @@ settings, including an API token.
 This will be simplified in future versions.
 
 To update the test fixtures, run `make fixtures`.  This will record the API responses into the `fixtures/` directory.
-Be careful about committing any sensitive account details.  An attempt has been made to sanitize IP addresses and
-dates, but no automated sanitization will be performed against `fixtures/*Account*.yaml`, for example.
+Be careful about committing any sensitive account details.  An attempt has been made to sanitize IP addresses, tokens,
+and dates, but no automated sanitization will be performed against `fixtures/*Account*.yaml`, for example. Be careful when
+committing fixtures.
 
 To prevent disrupting unaffected fixtures, target fixture generation like so: `make ARGS="-run TestListVolumes" fixtures`.
 
