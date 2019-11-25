@@ -160,6 +160,61 @@ func (client Client) WaitForVolumeLinodeID(ctx context.Context, volumeID int, li
 	}
 }
 
+// WaitForLKEClusterStatus waits for the LKECluster to reach the desired state
+// before returning. It will timeout with an error after timeoutSeconds.
+func (client Client) WaitForLKEClusterReady(ctx context.Context, clusterID int, timeoutSeconds int) (*LKECluster, error) {
+	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeoutSeconds)*time.Second)
+	defer cancel()
+
+	ticker := time.NewTicker(client.millisecondsPerPoll * time.Millisecond)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			cluster, err := client.GetLKECluster(ctx, clusterID)
+			if err != nil {
+				return cluster, err
+			}
+			if cluster.Status == LKEClusterReady {
+				return cluster, nil
+			}
+		case <-ctx.Done():
+			return nil, fmt.Errorf("Error waiting for Cluster %d: %s", clusterID, ctx.Err())
+		}
+	}
+}
+
+// WaitForLKEClusterPoolReady waits for the LKEClusterPool Nodes to all become ready
+// It will timeout with an error after timeoutSeconds.
+func (client Client) WaitForLKEClusterPoolReady(ctx context.Context, clusterID int, poolID int, timeoutSeconds int) (*LKEClusterPool, error) {
+	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeoutSeconds)*time.Second)
+	defer cancel()
+
+	ticker := time.NewTicker(client.millisecondsPerPoll * time.Millisecond)
+	defer ticker.Stop()
+
+OUTER:
+	for {
+		select {
+		case <-ticker.C:
+			pool, err := client.GetLKEClusterPool(ctx, clusterID, poolID)
+			if err != nil {
+				return pool, err
+			}
+			for i := range pool.Linodes {
+				if pool.Linodes[i].Status != LKELinodeReady {
+					continue OUTER
+				}
+			}
+
+			return pool, nil
+		case <-ctx.Done():
+			return nil, fmt.Errorf("Error waiting for Cluster Pool %d: %s", poolID, ctx.Err())
+		}
+	}
+}
+
 // WaitForEventFinished waits for an entity action to reach the 'finished' state
 // before returning. It will timeout with an error after timeoutSeconds.
 // If the event indicates a failure both the failed event and the error will be returned.
